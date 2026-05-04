@@ -16,7 +16,9 @@ This is the living map of Maciek's home/lab network as Tars learns it.
 
 Known roles:
 
-- Runs Nginx Proxy Manager (NPM), which proxies OpenClaw.
+- Runs Nginx Proxy Manager (NPM) as a TrueNAS app, which proxies OpenClaw.
+- NPM app IP: `192.168.50.12` on bridged networking.
+- NPM app uses ports `80` and `443`.
 - Hosts an Incus container named/reached as `ollama` where OpenClaw is installed.
 
 ### `ollama.moleda.io` / `ollama`
@@ -41,10 +43,11 @@ Important paths:
 
 ### Proxy / ingress split
 
-- OpenClaw is proxied through Nginx Proxy Manager (NPM) running on the TrueNAS NAS.
-- OpenClaw path: NPM on TrueNAS → `ollama` Incus container → OpenClaw gateway on port `18789`.
+- OpenClaw is proxied through Nginx Proxy Manager (NPM) running as a TrueNAS app at `192.168.50.12`.
+- NPM uses bridged networking and occupies ports `80` and `443`.
+- OpenClaw path: NPM app on TrueNAS (`192.168.50.12`) → `ollama` Incus container → OpenClaw gateway on port `18789`.
 - Traefik is the proxy/ingress for services running on the Kubernetes cluster.
-- If OpenClaw reports `Proxy headers detected from untrusted address`, trust the NPM proxy IP in `gateway.trustedProxies`.
+- If OpenClaw reports `Proxy headers detected from untrusted address`, trust the NPM proxy IP `192.168.50.12` in `gateway.trustedProxies`.
 
 ## Kubernetes / k3s
 

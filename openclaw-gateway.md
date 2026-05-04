@@ -28,17 +28,17 @@ Then restart: `systemctl --user kill -s SIGUSR1 openclaw-gateway`
 
 ## Fix: "Proxy headers detected from untrusted address"
 
-OpenClaw is proxied through Nginx Proxy Manager (NPM), not Traefik. Add the NPM proxy IP to `gateway.trustedProxies` in `/root/.openclaw/openclaw.json`:
+OpenClaw is proxied through Nginx Proxy Manager (NPM), not Traefik. NPM runs as a TrueNAS app on bridged networking at `192.168.50.12` and uses ports `80` and `443`. Add the NPM app IP to `gateway.trustedProxies` in `/root/.openclaw/openclaw.json`:
 
 ```json
 "gateway": {
-  "trustedProxies": ["<NPM_IP>"]
+  "trustedProxies": ["192.168.50.12"]
 }
 ```
 
 Then restart: `systemctl --user kill -s SIGUSR1 openclaw-gateway`
 
-Known correction: do not use `192.168.50.12` as "Traefik for OpenClaw" unless later verified; OpenClaw's proxy path is NAS/TrueNAS NPM → `ollama` Incus container → OpenClaw gateway.
+Known correction: `192.168.50.12` is the NPM TrueNAS app IP for OpenClaw, not Traefik. OpenClaw's proxy path is NAS/TrueNAS NPM app → `ollama` Incus container → OpenClaw gateway.
 
 ---
 
