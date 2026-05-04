@@ -29,7 +29,12 @@ Home cluster managed via ArgoCD GitOps. Full details — app layout, access, con
 
 ## Notes and Runbooks
 
-Save all troubleshooting notes, runbooks, and hard-won fixes as Markdown files in this repo (e.g. `openclaw-gateway.md`). Do not save them only to Claude's memory directory — they need to live here so they can move between machines.
+Save all troubleshooting notes, runbooks, and hard-won fixes as Markdown files in this repo (e.g. `openclaw-gateway.md`). Do not save them only to an assistant memory directory — they need to live here so they can move between machines.
+
+Start with:
+- `TARS.md` — Tars/OpenClaw assistant operating notes.
+- `home-network-map.md` — living topology and service map for Maciek's home/lab network.
+- `openclaw-gateway.md` — OpenClaw gateway troubleshooting runbook.
 
 ## Working Style
 
