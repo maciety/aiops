@@ -1,8 +1,10 @@
 # OpenClaw Gateway — Troubleshooting Notes
 
 Gateway runs as a user systemd service on `ollama` host (port 18789).
-Web UI: https://openclaw.moleda.io, proxied through Traefik at 192.168.50.12.
+Web UI: https://openclaw.moleda.io, proxied through Nginx Proxy Manager (NPM) running on the TrueNAS NAS.
 Config: `/root/.openclaw/openclaw.json`
+
+`ollama` is an Incus container running on the TrueNAS host; OpenClaw is installed inside that container.
 
 ---
 
@@ -26,15 +28,17 @@ Then restart: `systemctl --user kill -s SIGUSR1 openclaw-gateway`
 
 ## Fix: "Proxy headers detected from untrusted address"
 
-Add Traefik's LAN IP to `gateway.trustedProxies` in `/root/.openclaw/openclaw.json`:
+OpenClaw is proxied through Nginx Proxy Manager (NPM), not Traefik. Add the NPM proxy IP to `gateway.trustedProxies` in `/root/.openclaw/openclaw.json`:
 
 ```json
 "gateway": {
-  "trustedProxies": ["192.168.50.12"]
+  "trustedProxies": ["<NPM_IP>"]
 }
 ```
 
 Then restart: `systemctl --user kill -s SIGUSR1 openclaw-gateway`
+
+Known correction: do not use `192.168.50.12` as "Traefik for OpenClaw" unless later verified; OpenClaw's proxy path is NAS/TrueNAS NPM → `ollama` Incus container → OpenClaw gateway.
 
 ---
 

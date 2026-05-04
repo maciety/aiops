@@ -12,13 +12,22 @@ This is the living map of Maciek's home/lab network as Tars learns it.
 
 ## Known hosts
 
+### TrueNAS NAS
+
+Known roles:
+
+- Runs Nginx Proxy Manager (NPM), which proxies OpenClaw.
+- Hosts an Incus container named/reached as `ollama` where OpenClaw is installed.
+
 ### `ollama.moleda.io` / `ollama`
+
+`ollama` is an Incus container running on the TrueNAS host.
 
 Known access paths:
 
 - SSH: `ssh ollama` or `ssh ollama.moleda.io`
 
-Known services:
+Known services inside the container:
 
 - Ollama via systemd on port `11434`
 - OpenClaw gateway as a user systemd service on port `18789`
@@ -30,10 +39,12 @@ Important paths:
 - OpenClaw paired devices: `/root/.openclaw/devices/paired.json`
 - OpenClaw pending pairing requests: `/root/.openclaw/devices/pending.json`
 
-### Traefik ingress
+### Proxy / ingress split
 
-- OpenClaw is proxied through Traefik at `192.168.50.12`.
-- Traefik must be trusted by OpenClaw via `gateway.trustedProxies` when proxy headers are present.
+- OpenClaw is proxied through Nginx Proxy Manager (NPM) running on the TrueNAS NAS.
+- OpenClaw path: NPM on TrueNAS → `ollama` Incus container → OpenClaw gateway on port `18789`.
+- Traefik is the proxy/ingress for services running on the Kubernetes cluster.
+- If OpenClaw reports `Proxy headers detected from untrusted address`, trust the NPM proxy IP in `gateway.trustedProxies`.
 
 ## Kubernetes / k3s
 
@@ -64,7 +75,9 @@ curl 'https://loki-api.moleda.io/loki/api/v1/query_range?query=...'
 
 1. Define the failing user-visible endpoint or service.
 2. Check DNS/HTTP reachability from the current environment.
-3. Check ingress/proxy path: domain → Traefik → Kubernetes service/pod, or domain → host service.
+3. Check the relevant proxy path:
+   - Kubernetes service: domain → Traefik → Kubernetes service/pod.
+   - OpenClaw: domain → NPM on TrueNAS → `ollama` Incus container → OpenClaw gateway.
 4. Check Prometheus for health, restarts, saturation, and recent changes.
 5. Check Loki or service logs for the exact failing component.
 6. Only then propose or make a fix, and document the resulting runbook.
