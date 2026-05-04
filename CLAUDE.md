@@ -35,6 +35,7 @@ Start with:
 - `TARS.md` — Tars/OpenClaw assistant operating notes.
 - `home-network-map.md` — living topology and service map for Maciek's home/lab network.
 - `openclaw-gateway.md` — OpenClaw gateway troubleshooting runbook.
+- `k3s.md` — Kubernetes/k3s health checks, Prometheus alerts, and Longhorn cleanup notes.
 
 ## Working Style
 

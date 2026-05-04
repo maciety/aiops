@@ -53,8 +53,10 @@ Important paths:
 
 - Home cluster runs k3s and is managed by ArgoCD GitOps.
 - `kubectl` default context is expected to point at this cluster for read-only investigation.
+- Current known nodes: `node2` (`192.168.50.23`), `node3` (`192.168.50.133`), `rk1` (`192.168.50.127`).
 - Apps generally live under the `moleda.io` domain.
 - Ingress stack: Traefik + cert-manager.
+- Runbook: `k3s.md`.
 - Full app layout and conventions are documented on Maciek's machine at `/Users/maciek/src/home-k8s/CLAUDE.md`.
 - Gotcha: changes to `applications/*.yaml` must be applied manually with `kubectl apply`; ArgoCD does not self-manage its own Application CRDs.
 
@@ -88,7 +90,7 @@ curl 'https://loki-api.moleda.io/loki/api/v1/query_range?query=...'
 ## Needs confirmation / to discover
 
 - LAN subnet(s), VLANs, and router/firewall model.
-- k3s node names, IPs, roles, storage classes, and backup strategy.
+- k3s backup strategy.
 - Home Assistant URL, host, install type, and integration boundaries.
 - NAS/storage layout, if any.
 - Alerting path and notification channels.
